@@ -1,0 +1,11 @@
+SELECT
+sc.id school_id,
+sc.name,
+
+ COUNT (md.id) modules_count
+FROM public.modules md
+INNER JOIN public.schools sc
+ON md.school_Id=sc.id
+GROUP BY 
+sc.id,
+sc.name

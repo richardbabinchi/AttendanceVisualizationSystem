@@ -1,0 +1,67 @@
+WITH
+    constant_1_str AS (VALUES (:corequisite)),
+    constant_2_int AS (VALUES (:elective))
+ SELECT
+dp.id department_id,
+dp.name department_name,
+us.name user_name,
+us.id user_id,
+us.type user_type,
+   SUM( CASE 
+        WHEN ad.mark= 'attended' AND dpm.type='corequisite'  THEN 1 ELSE 0 END)/ (table constant_2_int) AS  avg_corequisite,
+  SUM(CASE   WHEN ad.mark='attended' AND dpm.type='elective' THEN 1 ELSE 0 END)/((table constant_1_str)-2) AS avg_elective
+  
+FROM public.department dp
+INNER JOIN public.department_users dpu
+ON dp.id=dpu.department_id
+INNER JOIN public.department_modules dpm
+ON dp.id=dpm.department_id
+INNER JOIN public.modules md
+ON md.id=dpm.module_id
+INNER JOIN public.users us
+ON dpu.user_id=us.id
+INNER JOIN public.events ev
+ON dpm.module_id=ev.module_id
+INNER JOIN public.sessions ss
+ON ss.event_id=ev.id
+INNER JOIN public.attendance ad
+ON ad.session_id=ss.id
+WHERE us.id=:student_id
+AND us.type='student'
+AND ad.user_id IN ( dpu.user_id)
+GROUP BY 
+dp.id,
+dp.name,
+us.type,
+us.id,
+us.name 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

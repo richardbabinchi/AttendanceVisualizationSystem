@@ -1,0 +1,22 @@
+SELECT
+sc.id school_id,
+dp.id department_id,
+dp.name department_name,
+sc.name school_name,
+us.type user_type,
+ COUNT (dp.id) user_count
+FROM public.department dp
+INNER JOIN public.department_users dpu
+ON dp.id=dpu.department_id
+INNER JOIN public.schools sc
+ON sc.id= dp.school_id
+INNER JOIN public.users us
+ON dpu.user_id=us.id
+WHERE us.type=:userType
+AND dp.id=:id
+GROUP BY 
+sc.id,
+sc.name,
+dp.id,
+dp.name,
+us.type

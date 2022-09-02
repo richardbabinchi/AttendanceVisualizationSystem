@@ -1,0 +1,17 @@
+SELECT
+us.id id,
+us.name  name,
+dp.id department_id,
+dp.name department
+FROM public.users us
+INNER JOIN public.department_users du
+ON du.user_id=us.id
+INNER JOIN public.department dp
+ON du.department_id=dp.id
+WHERE dp.id=?
+AND us.type='student'
+GROUP BY 
+us.id,
+us.name,
+dp.id,
+dp.name

@@ -1,0 +1,48 @@
+SELECT   
+sc.id school_id,
+md.id module_id,
+sc.name school_name,
+md.name module_name,
+ss.event_date,
+
+
+SUM(CASE
+            WHEN ad.mark = 'attended'
+            THEN 1
+            ELSE 0
+        END) AS PRESENT, 
+    SUM(CASE
+            WHEN  ad.mark = 'not_attended'
+            THEN 1
+            ELSE 0
+        END) AS ABSENT
+FROM    
+    public.attendance ad
+ INNER JOIN public.sessions ss
+ON ad.session_id=ss.id
+INNER JOIN public.events ev
+ON ev.id= ss.event_id
+INNER JOIN public.modules md
+ON md.id= ev.module_id
+INNER JOIN public.schools sc
+ON md.school_id= sc.id
+WHERE ss.event_date=:event_date
+AND md.id=:id
+GROUP BY 
+    sc.id,
+    sc.name,
+    md.id,
+	md.name,
+    ss.event_date
+
+ORDER BY 
+md.name
+
+
+
+
+
+
+
+
+
